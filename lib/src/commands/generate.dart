@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:openapi_spec/openapi_spec.dart';
+import 'package:openapi_spec/src/utils/compatibility_checker.dart';
 import 'package:path/path.dart' as p;
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
@@ -120,6 +121,9 @@ class GenerateCommand extends Command<int> {
             source: rawSchemaText,
             format: OpenApiFormat.fromExtention(fileExtension))
         .centralizedSpec();
+
+    // Warn the user about any compatibility issues
+    checkCompatibility(spec, _logger);
 
     await spec.generate(
       destination: destination,
